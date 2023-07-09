@@ -1,54 +1,45 @@
+import art
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
-direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n")
-text = input("Type your message:\n").lower()
-shift = int(input("Type the shift number:\n"))
+print(art.logo)
 
-#TODO-1: Create a function called 'encrypt' that takes the 'text' and 'shift' as inputs.
-def encrypt(text, shift):
+def ceaser(text, shift, direction):
     '''
     Parameters:
         text(str): word input
         shift(int): ceaser shift
+        direction(str): encode/decode
     Returns:
         Print statement
     '''
-    #TODO-2: Inside the 'encrypt' function, shift each letter of the 'text' forwards in the alphabet by the shift amount and print the encrypted text.  
     output = ''
+    if direction == 'decode':
+        shift *=-1
     for letter in text:
-        current = alphabet.index(letter)
-        shifted = current + shift
-        if shifted<len(alphabet)-1:
-            output += alphabet[shifted]  
+        if letter in alphabet:
+            current = alphabet.index(letter)
+            shifted = current + shift
+            if shifted<len(alphabet)-1 and shifted>=0:
+                output += alphabet[shifted]  
+            else:
+                if shifted>0:
+                    new_shift = shifted%(len(alphabet)-1)
+                    output += alphabet[new_shift-1]   
+                else: 
+                    new_shift = shifted+(len(alphabet)-1)
+                    output += alphabet[new_shift+1]  
         else:
-            new_shift = shifted%(len(alphabet)-1)
-            output += alphabet[new_shift-1]           
-    print(f"The encoded text is {output}")
-    
-def decrypt(text, shift):
-    '''
-    Parameters:
-        text(str): word input
-        shift(int): ceaser shift
-    Returns:
-        Print statement
-    '''
-    #TODO-2: Inside the 'encrypt' function, shift each letter of the 'text' forwards in the alphabet by the shift amount and print the encrypted text.  
-    output = ''
-    for letter in text:
-        current = alphabet.index(letter)
-        shifted = current - shift
-        if shifted>=0:
-            output += alphabet[shifted]  
-        else:
-            new_shift = shifted+(len(alphabet)-1)
-            output += alphabet[new_shift+1]           
-    print(f"The encoded text is {output}")
-    
+            output+=letter       
+    print(f"The {direction}d text is {output}")
 
-if direction == 'encode':
-    encrypt(text, shift)
-elif direction == 'decode':
-    decrypt(text, shift)
-else:
-    print("Invalid option choice")
+
+flag = True
+while flag ==True:
+    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n")
+    text = input("Type your message:\n").lower()
+    shift = int(input("Type the shift number:\n"))
+    ceaser(text, shift, direction)
+    response = input("Do you want to continue using ceaser cipher?\nType yes or no\n")
+    if response == 'no':
+        print("Goodbye!")
+        flag = False
